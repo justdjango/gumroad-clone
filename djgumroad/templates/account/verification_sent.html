@@ -4,10 +4,17 @@
 
 {% block head_title %}{% trans "Verify Your E-mail Address" %}{% endblock %}
 
-{% block inner %}
-    <h1>{% trans "Verify Your E-mail Address" %}</h1>
+{% block content %}
+    <div class="prose-lg">
+        <h1>{% trans "Start Selling! 🎉" %}</h1>
 
-    <p>{% blocktrans %}We have sent an e-mail to you for verification. Follow the link provided to finalize the signup process. Please contact us if you do not receive it within a few minutes.{% endblocktrans %}</p>
+        <p>Thank you for joining! We just need you to confirm your email address.</p>
+
+        <p>{% blocktrans %}We have sent an e-mail to you for verification. Follow the link provided to finalize the
+            signup process. Please contact us if you do not receive it within a few minutes.{% endblocktrans %}</p>
+
+        <p>One quick note: Please check your spam for an email from us. If it does show up in spam, please move it over
+            to your inbox, as that will let you see future emails from us 😁</p>
+    </div>
 
 {% endblock %}
-

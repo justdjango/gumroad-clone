@@ -74,10 +74,13 @@ THIRD_PARTY_APPS = [
     "rest_framework",
     "rest_framework.authtoken",
     "corsheaders",
+    "tailwind",
+    "crispy_tailwind",
 ]
 
 LOCAL_APPS = [
     "djgumroad.users.apps.UsersConfig",
+    "djgumroad.theme.apps.ThemeConfig"
     # Your stuff: custom apps go here
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
@@ -196,7 +199,8 @@ TEMPLATES = [
 FORM_RENDERER = "django.forms.renderers.TemplatesSetting"
 
 # http://django-crispy-forms.readthedocs.io/en/latest/install.html#template-packs
-CRISPY_TEMPLATE_PACK = "bootstrap4"
+CRISPY_ALLOWED_TEMPLATE_PACKS = "tailwind"
+CRISPY_TEMPLATE_PACK = "tailwind"
 
 # FIXTURES
 # ------------------------------------------------------------------------------
@@ -284,5 +288,6 @@ REST_FRAMEWORK = {
 
 # django-cors-headers - https://github.com/adamchainz/django-cors-headers#setup
 CORS_URLS_REGEX = r"^/api/.*$"
-# Your stuff...
-# ------------------------------------------------------------------------------
+
+# django-tailwind - https://github.com/timonweb/django-tailwind#quick-start
+TAILWIND_APP_NAME = 'theme'
