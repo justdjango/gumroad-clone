@@ -15,3 +15,6 @@ class Product(models.Model):
 
     def __str__(self):
         return self.name
+
+    def price_display(self):
+        return "{0:.2f}".format(self.price / 100)
