@@ -4,7 +4,9 @@
 
 <section class="text-gray-600 body-font">
   <div class="container px-5 py-24 mx-auto">
-      <a href='#' class="bg-gray-500 px-3 py-2 text-white rounded-md">Create a product</a>
+    <a href="{% url 'product-create' %}" class="bg-gray-500 px-3 py-2 text-white rounded-md">
+      Create a product
+    </a>
     <div class="mt-5 flex flex-wrap -m-4">
       {% for product in object_list %}
         <div class="lg:w-1/4 md:w-1/2 p-4 w-full">

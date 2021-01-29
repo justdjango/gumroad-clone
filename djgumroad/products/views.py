@@ -1,7 +1,8 @@
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.urls import reverse
 from .models import Product
-
+from .forms import ProductModelForm
 
 class ProductListView(generic.ListView):
     template_name = "discover.html"
@@ -22,4 +23,18 @@ class UserProductListView(LoginRequiredMixin, generic.ListView):
         return Product.objects.filter(user=self.request.user)
 
 
+class ProductCreateView(LoginRequiredMixin, generic.CreateView):
+    template_name = "products/product_create.html"
+    form_class = ProductModelForm
 
+    def get_success_url(self):
+        return reverse("products:product-detail", kwargs={
+            "slug": self.product.slug
+        })
+
+    def form_valid(self, form):
+        instance = form.save(commit=False)
+        instance.user = self.request.user
+        instance.save()
+        self.product = instance
+        return super(ProductCreateView, self).form_valid(form)
