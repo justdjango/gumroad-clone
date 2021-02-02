@@ -4,9 +4,10 @@ from django.urls import reverse
 from .models import Product
 from .forms import ProductModelForm
 
+
 class ProductListView(generic.ListView):
     template_name = "discover.html"
-    queryset = Product.objects.all()
+    queryset = Product.objects.filter(active=True)
 
 
 class ProductDetailView(generic.DetailView):
