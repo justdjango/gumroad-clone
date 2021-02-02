@@ -1,9 +1,11 @@
 import stripe
+from stripe.error import SignatureVerificationError
 from django.conf import settings
+from django.views.decorators.csrf import csrf_exempt
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from .models import Product
 from .forms import ProductModelForm
 
@@ -105,5 +107,40 @@ class CreateCheckoutSessionView(generic.View):
             "id": session.id
         })
 
+
 class SuccessView(generic.TemplateView):
     template_name = "success.html"
+
+
+@csrf_exempt
+def stripe_webhook(request, *args, **kwargs):
+    CHECKOUT_SESSION_COMPLETED = "checkout.session.completed"
+    
+    payload = request.body
+    sig_header = request.META["HTTP_STRIPE_SIGNATURE"]
+    
+    try:
+        event = stripe.Webhook.construct_event(
+            payload,
+            sig_header,
+            settings.STRIPE_WEBHOOK_SECRET
+        )
+
+    except ValueError as e:
+        print(e)
+        return HttpResponse(status=400)
+
+    except SignatureVerificationError as e:
+        print(e)
+        return HttpResponse(status=400)
+
+    if event["type"] == CHECKOUT_SESSION_COMPLETED:
+        print(event)
+
+    # listen for successful payments
+
+    # who paid for what?
+
+    # give access to the user for the product they purchased
+
+    return HttpResponse()
