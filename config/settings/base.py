@@ -292,3 +292,7 @@ CORS_URLS_REGEX = r"^/api/.*$"
 
 # django-tailwind - https://github.com/timonweb/django-tailwind#quick-start
 TAILWIND_APP_NAME = 'theme'
+
+# stripe
+STRIPE_PUBLIC_KEY = env("STRIPE_PUBLIC_KEY")
+STRIPE_SECRET_KEY = env("STRIPE_SECRET_KEY")
