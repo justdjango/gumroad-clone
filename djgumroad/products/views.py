@@ -38,3 +38,27 @@ class ProductCreateView(LoginRequiredMixin, generic.CreateView):
         instance.save()
         self.product = instance
         return super(ProductCreateView, self).form_valid(form)
+
+    
+
+class ProductUpdateView(LoginRequiredMixin, generic.UpdateView):
+    template_name = "products/product_update.html"
+    form_class = ProductModelForm
+
+    def get_queryset(self):
+        return Product.objects.filter(user=self.request.user)
+
+    def get_success_url(self):
+        return reverse("products:product-detail", kwargs={
+            "slug": self.get_object().slug
+        })
+
+
+class ProductDeleteView(LoginRequiredMixin, generic.DeleteView):
+    template_name = "products/product_delete.html"
+
+    def get_queryset(self):
+        return Product.objects.filter(user=self.request.user)
+
+    def get_success_url(self):
+        return reverse("user-products")
