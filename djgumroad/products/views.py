@@ -1,5 +1,6 @@
 import stripe
 from stripe.error import SignatureVerificationError
+from django.contrib.auth import get_user_model
 from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
 from django.views import generic
@@ -10,6 +11,7 @@ from .models import Product
 from .forms import ProductModelForm
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
+User = get_user_model()
 
 
 class ProductListView(generic.ListView):
@@ -84,7 +86,16 @@ class CreateCheckoutSessionView(generic.View):
         domain = "https://domain.com"
         if settings.DEBUG:
             domain = "http://127.0.0.1:8000"
+        customer = None
+        customer_email = None
+        if request.user.is_authenticated:
+            if request.user.stripe_customer_id:
+                customer = request.user.stripe_customer_id
+            else:
+                customer_email = request.user.email
         session = stripe.checkout.Session.create(
+            customer=customer,
+            customer_email=customer_email,
             payment_method_types=['card'],
             line_items=[
                 {
@@ -101,6 +112,9 @@ class CreateCheckoutSessionView(generic.View):
             mode='payment',
             success_url=domain + reverse("success"),
             cancel_url=domain + reverse("discover"),
+            metadata={
+                "product_id": product.id
+            }
         )
 
         return JsonResponse({
@@ -135,12 +149,26 @@ def stripe_webhook(request, *args, **kwargs):
         return HttpResponse(status=400)
 
     if event["type"] == CHECKOUT_SESSION_COMPLETED:
-        print(event)
+        product_id = event["data"]["object"]["metadata"]["product_id"]
+        product = Product.objects.get(id=product_id)
 
-    # listen for successful payments
-
-    # who paid for what?
-
-    # give access to the user for the product they purchased
-
+        stripe_customer_id = event["data"]["object"]["customer"]
+        try:
+            user = User.objects.get(stripe_customer_id=stripe_customer_id)
+            user.userlibrary.products.add(product)
+        except User.DoesNotExist:
+            # assign the customer_id to the corresponding user
+            stripe_customer_email = event["data"]["object"]["customer_details"]["email"]
+            
+            try:
+                user = User.objects.get(email=stripe_customer_email)
+                user.stripe_customer_id = stripe_customer_id
+                user.save()
+                user.userlibrary.products.add(product)
+            except User.DoesNotExist:
+                # this was an anonymous checkout
+                # TODO: handle anonymous checkout
+                print("User does not exist")
+                pass
+            
     return HttpResponse()
