@@ -21,12 +21,16 @@
       type="text/css"
     />
 
+    <style>
+        [x-cloak] { display: none; }
+    </style>
     {% block css %}
     <!-- This file stores project-specific CSS -->
     <link href="{% static 'css/project.css' %}" rel="stylesheet" />
     {% endblock %}
     <!-- Le javascript
 		================================================== -->
+    <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
     {% block javascript %}
     <script defer src="{% static 'js/project.js' %}"></script>
     {% endblock javascript %}
@@ -49,7 +53,7 @@
       </div>
     </div>
 
-    {% block modal %}{% endblock modal %} 
+  {% block modal %}{% endblock modal %}
 	{% block inline_javascript %} 
 	{# Script tags with only code, no src (defer by default) #} 
 	{% endblock inline_javascript %}
