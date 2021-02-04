@@ -1,0 +1,29 @@
+{% load socialaccount %}
+
+{% get_providers as socialaccount_providers %}
+
+{% for provider in socialaccount_providers %}
+
+    {% if provider.id == "openid" %}
+        {% for brand in provider.get_brands %}
+            <li>
+                <a title="{{ brand.name }}"
+                   class="socialaccount_provider {{ provider.id }} {{ brand.id }}"
+                   href="{% provider_login_url provider.id openid=brand.openid_url process=process %}"
+                >{{ brand.name }}</a>
+            </li>
+        {% endfor %}
+    {% endif %}
+
+    {% if provider.name == "GitHub" %}
+        <span class="w-full inline-flex rounded-md shadow-sm">
+        <a class="w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-gray-700 hover:bg-gray-900 focus:outline-none focus:border-gray-900 focus:shadow-outline-gray active:bg-gray-900 transition duration-150 ease-in-out"
+           href="{% provider_login_url provider.id process=process scope=scope auth_params=auth_params %}">
+            Sign in with GitHub
+        </a>
+    </span>
+    {% else %}
+        <a title="{{ provider.name }}" class="socialaccount_provider {{ provider.id }}"
+           href="{% provider_login_url provider.id process=process scope=scope auth_params=auth_params %}">{{ provider.name }}</a>
+    {% endif %}
+{% endfor %}

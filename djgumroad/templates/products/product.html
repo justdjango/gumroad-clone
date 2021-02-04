@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block javascript %}
+    <script src="https://js.stripe.com/v3/"></script>
+{% endblock javascript %}
+
+{% block content %}
+
+<section class="text-gray-600 body-font overflow-hidden">
+  <div class="container px-5 py-24 mx-auto">
+    <div class="lg:w-4/5 mx-auto flex flex-wrap">
+      <div class="lg:w-1/2 w-full lg:pr-10 lg:py-6 mb-6 lg:mb-0">
+        <h2 class="text-sm title-font text-gray-500 tracking-widest"></h2>
+        <h1 class="text-gray-900 text-3xl title-font font-medium mb-4">{{ product.name }}</h1>
+        <p class="leading-relaxed mb-4">
+          {{ product.description }} 
+        </p>
+        {% if has_access %}
+          <p class="text-lg text-gray-500">You have access to this product</p>
+          {% if product.content_url %}
+            <a href="{{ product.content_url }}" target="_blank" rel="nofollow noreferrer" class="mt-5 bg-blue-500 px-3 py-2 rounded-md text-white hover:bg-blue-600">
+              View Content
+            </a>
+          {% endif %}
+          {% if product.content_file %}
+            <a href="{{ product.content_file }}" download class="mt-5 bg-blue-500 px-3 py-2 rounded-md text-white hover:bg-blue-600">
+              View Content
+            </a>
+          {% endif %}
+        {% else %}
+          <div class="flex">
+            <span class="title-font font-medium text-2xl text-gray-900">${{ product.price_display }}</span>
+            <button type="button" id="checkout-button" class="flex ml-auto text-white bg-green-500 border-0 py-2 px-6 focus:outline-none hover:bg-green-600 rounded">
+              Buy now
+            </button>
+          </div>
+        {% endif %}
+      </div>
+      <img 
+        alt="{{ product.name }}" 
+        class="lg:w-1/2 w-full lg:h-auto h-64 object-cover object-center rounded" 
+        src="{% if product.cover %}{{ product.cover.url }}{% else %}{% static 'images/product-placeholder.png' %}{% endif %}" />
+    </div>
+  </div>
+</section>
+
+{% csrf_token %}
+{% endblock content %}
+
+{% block inline_javascript %}
+    <script type="text/javascript">
+
+      const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+      // Create an instance of the Stripe object with your publishable API key
+      var stripe = Stripe('{{ STRIPE_PUBLIC_KEY }}');
+      var checkoutButton = document.getElementById('checkout-button');
+
+      checkoutButton.addEventListener('click', function() {
+        // Create a new Checkout Session using the server-side endpoint you
+        // created in step 3.
+        fetch("{% url 'create-checkout-session' product.slug %}", {
+          method: 'POST',
+          headers: {'X-CSRFToken': csrftoken}
+        })
+        .then(function(response) {
+          return response.json();
+        })
+        .then(function(session) {
+            console.log(session)
+          return stripe.redirectToCheckout({ sessionId: session.id });
+        })
+        .then(function(result) {
+          // If `redirectToCheckout` fails due to a browser or network
+          // error, you should display the localized error message to your
+          // customer using `error.message`.
+          if (result.error) {
+            alert(result.error.message);
+          }
+        })
+        .catch(function(error) {
+          console.error('Error:', error);
+        });
+      });
+    </script>
+{% endblock inline_javascript %}

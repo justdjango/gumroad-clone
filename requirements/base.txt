@@ -5,6 +5,7 @@ argon2-cffi==20.1.0  # https://github.com/hynek/argon2_cffi
 whitenoise==5.2.0  # https://github.com/evansd/whitenoise
 redis==3.5.3  # https://github.com/andymccurdy/redis-py
 hiredis==1.1.0  # https://github.com/redis/hiredis-py
+stripe==2.55.1  # https://github.com/stripe/stripe-python
 
 # Django
 # ------------------------------------------------------------------------------
@@ -14,6 +15,8 @@ django-model-utils==4.1.1  # https://github.com/jazzband/django-model-utils
 django-allauth==0.44.0  # https://github.com/pennersr/django-allauth
 django-crispy-forms==1.10.0  # https://github.com/django-crispy-forms/django-crispy-forms
 django-redis==4.12.1  # https://github.com/jazzband/django-redis
+django-tailwind==1.1.0  # https://github.com/timonweb/django-tailwind
+crispy-tailwind==0.2.0  # https://github.com/django-crispy-forms/crispy-tailwind
 # Django REST Framework
 djangorestframework==3.12.2  # https://github.com/encode/django-rest-framework
 django-cors-headers==3.7.0 # https://github.com/adamchainz/django-cors-headers

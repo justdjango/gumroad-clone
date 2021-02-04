@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+<section class="text-gray-600 body-font">
+  <div class="container px-5 py-6 lg:py-12 mx-auto">
+    <div class="flex flex-wrap -m-4">
+      {% for product in object_list %}
+        <div class="lg:w-1/4 md:w-1/2 p-4 w-full">
+            <a href="{{ product.get_absolute_url }}" class="block relative h-48 rounded overflow-hidden">
+                <img 
+                    alt="{{ product.name }}" 
+                    class="object-cover object-center w-full h-full block" 
+                    src="{% if product.cover %}{{ product.cover.url }}{% else %}{% static 'images/product-placeholder.png' %}{% endif %}"
+                >
+            </a>
+            <div class="mt-4">
+                {% comment %} <h3 class="text-gray-500 text-xs tracking-widest title-font mb-1">CATEGORY</h3> {% endcomment %}
+                <a href="{{ product.get_absolute_url }}">
+                <h2 class="text-gray-900 title-font text-lg font-medium">
+                    {{ product.name }}
+                </h2>
+                </a>
+                <p class="mt-1">${{ product.price_display }}</p>
+            </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% endblock content %}

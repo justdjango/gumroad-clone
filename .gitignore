@@ -271,3 +271,5 @@ djgumroad/media/
 .pytest_cache/
 
 .env
+.vscode
+ngrok
