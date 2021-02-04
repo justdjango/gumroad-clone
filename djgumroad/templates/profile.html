@@ -3,43 +3,81 @@
 
 {% block content %}
 
-<section class="text-gray-600 body-font">
-  <div class="container px-5 py-24 mx-auto">
-    <h2 class="text-2xl text-gray-900">Profile</h2>
-    <p class="text-gray-500">Connect your Stripe account to get paid</p>
-    <a href="{% url 'stripe-account-link' %}">
-      <img src="{% static 'images/stripebutton.png' %}" class="mt-5 h-12" />
-    </a>
-    {% if details_submitted %}
-    <p>Your account is complete and you will receive payouts</p>
-    {% else %}
-    <p>Your account is incomplete. Please click on the Stripe Connect button to
-    complete your profile</p>
-    {% endif %}
-
-    <div class="flex flex-wrap -m-4">
-      {% for product in request.user.userlibrary.products.all %}
-        <div class="lg:w-1/4 md:w-1/2 p-4 w-full">
-            <a href="{{ product.get_absolute_url }}" class="block relative h-48 rounded overflow-hidden">
-                <img 
-                    alt="{{ product.name }}" 
-                    class="object-cover object-center w-full h-full block" 
-                    src="{% if product.cover %}{{ product.cover.url }}{% else %}https://dummyimage.com/420x260{% endif %}"
-                >
-            </a>
-            <div class="mt-4">
-                {% comment %} <h3 class="text-gray-500 text-xs tracking-widest title-font mb-1">CATEGORY</h3> {% endcomment %}
-                <a href="{{ product.get_absolute_url }}">
-                <h2 class="text-gray-900 title-font text-lg font-medium">
-                    {{ product.name }}
-                </h2>
-                </a>
-                <p class="mt-1">${{ product.price_display }}</p>
-            </div>
+<!-- Payment details -->
+    <div class="space-y-6 sm:px-6 lg:px-0 lg:col-span-9">
+      <section aria-labelledby="payment_details_heading">
+        <div>
+          <h2 id="payment_details_heading" class="text-lg leading-6 font-medium text-gray-900">Payment details</h2>
+          <p class="mt-1 text-sm text-gray-500">Connect your Stripe account to get paid</p>
         </div>
-      {% endfor %}
+
+        {% if details_submitted %}
+          <p class="mt-5">Your account is complete and you will receive payouts</p>
+        {% else %}
+          <div class="mt-5">
+            <a href="{% url 'stripe-account-link' %}">
+              <img src="{% static 'images/stripebutton.png' %}" class="mt-5 h-12" />
+            </a>
+            <p>
+              Your account is incomplete. Please click on the Stripe Connect button to complete your profile
+            </p>
+          </div>
+        {% endif %}
+
+      </section>
+
+      <!-- Billing history -->
+      <section aria-labelledby="billing_history_heading">
+        <div class="bg-white pt-6 shadow sm:rounded-md sm:overflow-hidden">
+          <div class="px-4 sm:px-6">
+            <h2 id="billing_history_heading" class="text-lg leading-6 font-medium text-gray-900">Purchased Products</h2>
+          </div>
+          <div class="mt-6 flex flex-col">
+            <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+              <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
+                <div class="overflow-hidden border-t border-gray-200">
+                  <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                      <tr>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          Name
+                        </th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          Description
+                        </th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          Amount
+                        </th>
+                        <th scope="col" class="relative px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          <span class="sr-only">View content</span>
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                      {% for product in request.user.userlibrary.products.all %}
+                        <tr>
+                          <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                            {{ product.name }}
+                          </td>
+                          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            {{ product.description }}
+                          </td>
+                          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            ${{ product.price_display }}
+                          </td>
+                          <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                            <a href="{{ product.get_absolute_url }}" class="text-green-600 hover:text-green-900">View product</a>
+                          </td>
+                        </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
-  </div>
-</section>
 
 {% endblock content %}

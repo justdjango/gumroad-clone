@@ -12,7 +12,7 @@
         </h2>
       </div>
       <div class="mt-4 flex md:mt-0 md:ml-4">
-        <a href="{% url 'product-create' %}" class="ml-3 inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+        <a href="{% url 'product-create' %}" class="ml-3 inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
           Create a product
         </a>
       </div>
@@ -21,6 +21,7 @@
     <div class="py-5 pt-12 md:pt-16 flex flex-col">
       <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
         <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
+          {% if object_list %}
           <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
             <table class="min-w-full divide-y divide-gray-200">
               <thead class="bg-gray-50">
@@ -69,13 +70,16 @@
                         {% endif %}
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                      <a href="{{ product.get_update_url }}" class="text-indigo-600 hover:text-indigo-900">Edit</a>
+                      <a href="{{ product.get_update_url }}" class="text-green-600 hover:text-green-900">Edit</a>
                     </td>
                   </tr>
                 {% endfor %}
               </tbody>
             </table>
           </div>
+          {% else %}
+            <p class="text-gray-500">You do not have any products</p>
+          {% endif %}
         </div>
       </div>
     </div>

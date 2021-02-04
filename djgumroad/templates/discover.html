@@ -1,9 +1,10 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block content %}
 
 <section class="text-gray-600 body-font">
-  <div class="container px-5 py-24 mx-auto">
+  <div class="container px-5 py-6 lg:py-12 mx-auto">
     <div class="flex flex-wrap -m-4">
       {% for product in object_list %}
         <div class="lg:w-1/4 md:w-1/2 p-4 w-full">
@@ -11,7 +12,7 @@
                 <img 
                     alt="{{ product.name }}" 
                     class="object-cover object-center w-full h-full block" 
-                    src="{% if product.cover %}{{ product.cover.url }}{% else %}https://dummyimage.com/420x260{% endif %}"
+                    src="{% if product.cover %}{{ product.cover.url }}{% else %}{% static 'images/product-placeholder.png' %}{% endif %}"
                 >
             </a>
             <div class="mt-4">
