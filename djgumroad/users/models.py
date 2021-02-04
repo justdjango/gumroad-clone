@@ -1,3 +1,5 @@
+import stripe
+from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 from django.db.models import CharField
 from django.db import models
@@ -5,6 +7,8 @@ from django.db.models.signals import post_save
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from djgumroad.products.models import Product, PurchasedProduct
+
+stripe.api_key = settings.STRIPE_SECRET_KEY
 
 
 class User(AbstractUser):
@@ -15,6 +19,7 @@ class User(AbstractUser):
     first_name = None  # type: ignore
     last_name = None  # type: ignore
     stripe_customer_id = models.CharField(max_length=100, blank=True, null=True)
+    stripe_account_id = models.CharField(max_length=100)
 
     def get_absolute_url(self):
         """Get url for user's detail view.
@@ -45,6 +50,12 @@ def post_save_user_receiver(sender, instance, created, **kwargs):
         purchased_products = PurchasedProduct.objects.filter(email=instance.email)
         for purchased_product in purchased_products:
             library.products.add(purchased_product.product)
+
+        account = stripe.Account.create(
+            type='express',
+        )
+        instance.stripe_account_id = account["id"]
+        instance.save()
 
 
 post_save.connect(post_save_user_receiver, sender=User)

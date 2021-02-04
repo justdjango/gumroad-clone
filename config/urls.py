@@ -13,7 +13,7 @@ from djgumroad.products.views import (
     SuccessView,
     stripe_webhook
 )
-from djgumroad.users.views import UserProfileView
+from djgumroad.users.views import UserProfileView, StripeAccountLinkView
 
 urlpatterns = [
     path("", TemplateView.as_view(template_name="pages/home.html"), name="home"),
@@ -21,6 +21,7 @@ urlpatterns = [
     path('products/', UserProductListView.as_view(), name='user-products'),
     path('products/create/', ProductCreateView.as_view(), name='product-create'),
     path('profile/', UserProfileView.as_view(), name='profile'),
+    path('stripe/auth/', StripeAccountLinkView.as_view(), name='stripe-account-link'),
     path("p/", include('djgumroad.products.urls', namespace='products')),
     path("create-checkout-session/<slug>/", CreateCheckoutSessionView.as_view(), name="create-checkout-session"),
     path('success/', SuccessView.as_view(), name='success'),

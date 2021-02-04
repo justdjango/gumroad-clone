@@ -1,9 +1,22 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block content %}
 
 <section class="text-gray-600 body-font">
   <div class="container px-5 py-24 mx-auto">
+    <h2 class="text-2xl text-gray-900">Profile</h2>
+    <p class="text-gray-500">Connect your Stripe account to get paid</p>
+    <a href="{% url 'stripe-account-link' %}">
+      <img src="{% static 'images/stripebutton.png' %}" class="mt-5 h-12" />
+    </a>
+    {% if details_submitted %}
+    <p>Your account is complete and you will receive payouts</p>
+    {% else %}
+    <p>Your account is incomplete. Please click on the Stripe Connect button to
+    complete your profile</p>
+    {% endif %}
+
     <div class="flex flex-wrap -m-4">
       {% for product in request.user.userlibrary.products.all %}
         <div class="lg:w-1/4 md:w-1/2 p-4 w-full">
