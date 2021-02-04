@@ -25,12 +25,12 @@
     {% if has_access %}
       <p class="text-lg text-gray-500">You have access to this product</p>
       {% if product.content_url %}
-        <a href="{{ product.content_url }}" target="_blank" rel="nofollow noreferrer" class="mt-5 bg-blue-500 px-3 py-2 rounded-md text-white hover:bg-blue-600" type="button" id="checkout-button">
+        <a href="{{ product.content_url }}" target="_blank" rel="nofollow noreferrer" class="mt-5 bg-blue-500 px-3 py-2 rounded-md text-white hover:bg-blue-600">
           View Content
         </a>
       {% endif %}
       {% if product.content_file %}
-        <a href="{{ product.content_file }}" download class="ml-5 mt-5 bg-blue-500 px-3 py-2 rounded-md text-white hover:bg-blue-600" type="button" id="checkout-button">
+        <a href="{{ product.content_file }}" download class="ml-5 mt-5 bg-blue-500 px-3 py-2 rounded-md text-white hover:bg-blue-600">
           View Content
         </a>
       {% endif %}
