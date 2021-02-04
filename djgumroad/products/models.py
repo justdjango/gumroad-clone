@@ -40,3 +40,12 @@ class Product(models.Model):
 
     def price_display(self):
         return "{0:.2f}".format(self.price / 100)
+
+
+class PurchasedProduct(models.Model):
+    email = models.EmailField()
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    date_purchased = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.email
