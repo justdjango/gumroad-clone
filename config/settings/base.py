@@ -80,7 +80,8 @@ THIRD_PARTY_APPS = [
 
 LOCAL_APPS = [
     "djgumroad.users.apps.UsersConfig",
-    "djgumroad.theme.apps.ThemeConfig"
+    "djgumroad.theme.apps.ThemeConfig",
+    "djgumroad.products.apps.ProductsConfig",
     # Your stuff: custom apps go here
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
@@ -291,3 +292,8 @@ CORS_URLS_REGEX = r"^/api/.*$"
 
 # django-tailwind - https://github.com/timonweb/django-tailwind#quick-start
 TAILWIND_APP_NAME = 'theme'
+
+# Stripe
+STRIPE_PUBLIC_KEY = env("STRIPE_PUBLIC_KEY")
+STRIPE_SECRET_KEY = env("STRIPE_SECRET_KEY")
+STRIPE_WEBHOOK_SECRET = env("STRIPE_WEBHOOK_SECRET")
