@@ -297,3 +297,8 @@ TAILWIND_APP_NAME = 'theme'
 STRIPE_PUBLIC_KEY = env("STRIPE_PUBLIC_KEY")
 STRIPE_SECRET_KEY = env("STRIPE_SECRET_KEY")
 STRIPE_WEBHOOK_SECRET = env("STRIPE_WEBHOOK_SECRET")
+
+# you can set this to true to solve the "WARNING Forbidden (CSRF cookie not set.)" but you'll lose CSRF on the whole damn website!
+# maybe try and add this setting with an if statement to the exact webhook address to keep csrf on rest of site?
+# UPDATE: actually, this seems to only be removing the csrf error when I resend the webhook request from stripe's website on normal purchase still there so useless 
+# CSRF_COOKIE_SECURE = True
